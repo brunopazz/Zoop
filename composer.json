@@ -1,0 +1,20 @@
+{
+  "name": "brunopazz/zoop-sdk",
+  "description": "SDK da plataforma digital da ZOOP",
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7"
+  },
+  "autoload": {
+    "psr-0": {
+      "Zoop": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bruno Paz",
+      "email": "brunopaz@gmail.com"
+    }
+  ]
+}
