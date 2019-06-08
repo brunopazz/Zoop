@@ -8,12 +8,9 @@
 
 namespace Zoop;
 
-use \Exception;
+use Exception;
 
-/**
- * Class Request
- * @package Getnet\API
- */
+
 class Request
 {
     /**
@@ -26,105 +23,13 @@ class Request
 
     function __construct(Credentials $credentials)
     {
-        if ($credentials->getEnv() == "PRODUCTION")
+        if ($credentials->getEnv() == "PRODUCTION") {
             $this->baseUrl = 'https://api.zoop.ws';
-        elseif ($credentials->getEnv() == "SANDBOX")
+        } elseif ($credentials->getEnv() == "SANDBOX") {
             $this->baseUrl = 'https://api.zoop.ws';
-        else
-            throw new Exception("wrong env", 400);
-    }
-
-
-
-
-    /**
-     * @param Getnet $credentials
-     * @param $url_path
-     * @param $method
-     * @param null $json
-     * @return mixed
-     * @throws \Exception
-     */
-    private function send(Getnet $credentials, $url_path, $method, $json = NULL)
-    {
-        $curl = curl_init($this->getFullUrl($url_path));
-
-        $defaultCurlOptions = array(
-            CURLOPT_CONNECTTIMEOUT => 60,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 60,
-            CURLOPT_HTTPHEADER     => array('Content-Type: application/json; charset=utf-8'),
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_SSL_VERIFYPEER => 0
-        );
-
-        if ($method == 'POST') {
-            $defaultCurlOptions[ CURLOPT_HTTPHEADER ][] = 'Authorization: Bearer ' . $credentials->getAuthorizationToken();
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
-        } elseif ($method == 'PUT') {
-            $defaultCurlOptions[ CURLOPT_HTTPHEADER ][] = 'Authorization: Bearer ' . $credentials->getAuthorizationToken();
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
-        } elseif ($method == 'AUTH') {
-            $defaultCurlOptions[ CURLOPT_HTTPHEADER ][0] = 'application/x-www-form-urlencoded';
-            curl_setopt($curl, CURLOPT_USERPWD, $credentials->getClientId() . ":" . $credentials->getClientSecret());
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+        } else {
+           return false;
         }
-        curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt_array($curl, $defaultCurlOptions);
-
-        if ($credentials->debug === true) {
-
-            print "\n\nJSON REQUEST\n";
-            print_r($json);
-
-            $info = curl_getinfo($curl);
-            print_r($info);
-            curl_setopt($curl, CURLOPT_VERBOSE, 1);
-        }
-
-        try {
-            $response = curl_exec($curl);
-        } catch (Exception $e) {
-            print "ERROR";
-        }
-        if ($credentials->debug === true) {
-            $info = curl_getinfo($curl);
-            print_r($info);
-            print_r(json_encode(json_decode($response), JSON_PRETTY_PRINT));
-        }
-
-        if (isset(json_decode($response)->error)) {
-            throw new Exception(json_decode($response)->error_description, 100);
-        }
-
-        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400) {
-            throw new Exception($response, 100);
-        }
-        if (!$response) {
-            print "ERROR";
-            EXIT;
-        }
-        curl_close($curl);
-
-        return json_decode($response, true);
-    }
-
-    /**
-     * Get request full url
-     *
-     * @param string $url_path
-     * @return string $url(config) + $url_path
-     */
-    private function getFullUrl($url_path)
-    {
-        if (stripos($url_path, $this->baseUrl, 0) === 0) {
-            return $url_path;
-        }
-
-        return $this->baseUrl . $url_path;
     }
 
     /**
@@ -135,10 +40,10 @@ class Request
         return $this->baseUrl;
     }
 
-
     /**
      * @param Getnet $credentials
-     * @param $url_path
+     * @param        $url_path
+     *
      * @return mixed
      * @throws Exception
      */
@@ -147,15 +52,85 @@ class Request
         return $this->send($credentials, $url_path, 'GET');
     }
 
-
     /**
      * @param Getnet $credentials
-     * @param $url_path
-     * @param $params
+     * @param        $url_path
+     * @param        $method
+     * @param null   $json
+     *
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    function post(Getnet $credentials, $url_path, $params)
+    private function send(
+        Credentials $credentials,
+        $url_path,
+        $method,
+        $json = null
+    ) {
+        $curl = curl_init($this->getFullUrl($url_path));
+
+        $defaultCurlOptions = array(
+            CURLOPT_CONNECTTIMEOUT => 60,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 60,
+            CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_SSL_VERIFYPEER => 0,
+        );
+        curl_setopt($curl, CURLOPT_USERPWD,
+            $credentials->getPublishableKey().":");
+
+        if ($method == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+        } elseif ($method == 'PUT') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+        }
+        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt_array($curl, $defaultCurlOptions);
+
+
+        try {
+            $response = curl_exec($curl);
+        } catch (Exception $e) {
+            return "ERROR";
+        }
+
+
+        if (isset(json_decode($response)->error)) {
+            throw new Exception(json_decode($response)->error->message, json_decode($response)->error->status_code);
+        }
+
+        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400) {
+            throw new Exception($response, 100);
+        }
+        if ( ! $response) {
+            print "ERROR";
+            EXIT;
+        }
+        curl_close($curl);
+
+        return $response;
+    }
+
+    /**
+     * Get request full url
+     *
+     * @param string $url_path
+     *
+     * @return string $url(config) + $url_path
+     */
+    private function getFullUrl($url_path)
+    {
+        if (stripos($url_path, $this->baseUrl, 0) === 0) {
+            return $url_path;
+        }
+
+        return $this->baseUrl.$url_path;
+    }
+
+    function post(Credentials $credentials, $url_path, $params)
     {
         return $this->send($credentials, $url_path, 'POST', $params);
     }
@@ -163,8 +138,9 @@ class Request
 
     /**
      * @param Getnet $credentials
-     * @param $url_path
-     * @param $params
+     * @param        $url_path
+     * @param        $params
+     *
      * @return mixed
      * @throws Exception
      */
