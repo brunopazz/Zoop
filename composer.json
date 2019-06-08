@@ -1,7 +1,8 @@
 {
   "name": "brunopazz/zoop-sdk",
   "description": "SDK da plataforma digital da ZOOP",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": ">=7"
   },
