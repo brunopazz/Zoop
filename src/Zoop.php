@@ -98,4 +98,26 @@ class Zoop
 
         return $authresponse;
     }
+
+    public function Split(Split $split,$transactionID)
+    {
+        try {
+
+            $response = $this->request->post($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/split_rules",
+                $split->toJSON());
+
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        $splitresponse = new SplitResponse();
+        $splitresponse->mapperJson(json_decode($response, true));
+
+        return $splitresponse;
+    }
 }

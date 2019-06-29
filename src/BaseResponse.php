@@ -54,6 +54,12 @@ class BaseResponse implements \JsonSerializable
         return false;
     }
 
+    public function hasSplitted(){
+
+        return false;
+
+    }
+
     /**
      * @return mixed
      */
