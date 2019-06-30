@@ -22,8 +22,8 @@ class installmentPlan implements \JsonSerializable
      */
     public function __construct($mode, $number_installments)
     {
-        $this->mode                = $mode;
-        $this->number_installments = $number_installments;
+        $this->mode                = (string)$mode;
+        $this->number_installments = (string)$number_installments;
     }
 
 
