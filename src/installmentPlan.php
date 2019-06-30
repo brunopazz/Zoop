@@ -47,7 +47,7 @@ class installmentPlan implements \JsonSerializable
      */
     public function setMode($mode)
     {
-        $this->mode = $mode;
+        $this->mode = (string) $mode;
 
         return $this;
     }
@@ -67,7 +67,7 @@ class installmentPlan implements \JsonSerializable
      */
     public function setNumberInstallments($number_installments)
     {
-        $this->number_installments = $number_installments;
+        $this->number_installments = (string) $number_installments;
 
         return $this;
     }

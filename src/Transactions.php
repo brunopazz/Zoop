@@ -118,7 +118,7 @@ class Transactions implements \JsonSerializable
      */
     public function setAmount($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (integer) $amount;
 
         return $this;
     }
@@ -138,7 +138,7 @@ class Transactions implements \JsonSerializable
      */
     public function setCurrency($currency)
     {
-        $this->currency = $currency;
+        $this->currency = (string) $currency;
 
         return $this;
     }
@@ -158,7 +158,7 @@ class Transactions implements \JsonSerializable
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = (string) $description;
 
         return $this;
     }
@@ -178,7 +178,7 @@ class Transactions implements \JsonSerializable
      */
     public function setPaymentType($payment_type)
     {
-        $this->payment_type = $payment_type;
+        $this->payment_type = (string) $payment_type;
 
         return $this;
     }
@@ -218,7 +218,7 @@ class Transactions implements \JsonSerializable
      */
     public function setOnBehalfOf($on_behalf_of)
     {
-        $this->on_behalf_of = $on_behalf_of;
+        $this->on_behalf_of = (string) $on_behalf_of;
 
         return $this;
     }
@@ -238,7 +238,7 @@ class Transactions implements \JsonSerializable
      */
     public function setReferenceId($reference_id)
     {
-        $this->reference_id = $reference_id;
+        $this->reference_id = (string) $reference_id;
 
         return $this;
     }
@@ -258,7 +258,7 @@ class Transactions implements \JsonSerializable
      */
     public function setUsage($usage)
     {
-        $this->usage = $usage;
+        $this->usage = (string) $usage;
 
         return $this;
     }
@@ -278,7 +278,7 @@ class Transactions implements \JsonSerializable
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = (string) $type;
 
         return $this;
     }
@@ -298,7 +298,7 @@ class Transactions implements \JsonSerializable
      */
     public function setHolderName($holder_name)
     {
-        $this->holder_name = $holder_name;
+        $this->holder_name = (string) $holder_name;
 
         return $this;
     }
@@ -318,7 +318,7 @@ class Transactions implements \JsonSerializable
      */
     public function setExpirationMonth($expiration_month)
     {
-        $this->expiration_month = $expiration_month;
+        $this->expiration_month = (string) $expiration_month;
 
         return $this;
     }
@@ -338,7 +338,7 @@ class Transactions implements \JsonSerializable
      */
     public function setExpirationYear($expiration_year)
     {
-        $this->expiration_year = $expiration_year;
+        $this->expiration_year = (string) $expiration_year;
 
         return $this;
     }
@@ -358,7 +358,7 @@ class Transactions implements \JsonSerializable
      */
     public function setCardNumber($card_number)
     {
-        $this->card_number = $card_number;
+        $this->card_number = (string) $card_number;
 
         return $this;
     }
@@ -378,7 +378,7 @@ class Transactions implements \JsonSerializable
      */
     public function setSecurityCode($security_code)
     {
-        $this->security_code = $security_code;
+        $this->security_code = (string) $security_code;
 
         return $this;
     }
@@ -422,7 +422,7 @@ class Transactions implements \JsonSerializable
      */
     public function setStatementDescriptor($statement_descriptor)
     {
-        $this->statement_descriptor = $statement_descriptor;
+        $this->statement_descriptor = (string) $statement_descriptor;
 
         return $this;
     }
