@@ -31,33 +31,15 @@ class BaseResponse implements \JsonSerializable
 
     }
 
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
     public function isAuthorized()
     {
         if ($this->getStatus() == "pre_authorized") {
             return true;
+        } elseif ($this->getStatus() == "succeeded") {
+            return true;
         }
 
         return false;
-    }
-
-    public function isCaptured(){
-
-       return false;
-    }
-    public function isCancelled(){
-
-        return false;
-    }
-
-    public function hasSplitted(){
-
-        return false;
-
     }
 
     /**
@@ -65,9 +47,10 @@ class BaseResponse implements \JsonSerializable
      */
     public function getStatus()
     {
-        if($this->hasError()){
+        if ($this->hasError()) {
             return "ERROR";
         }
+
         return $this->status;
     }
 
@@ -76,7 +59,27 @@ class BaseResponse implements \JsonSerializable
         if ( ! is_array($this->response)) {
             return true;
         }
+
         return false;
+    }
+
+    public function isCaptured()
+    {
+
+        return false;
+    }
+
+    public function isCancelled()
+    {
+
+        return false;
+    }
+
+    public function hasSplitted()
+    {
+
+        return "error";
+
     }
 
     public function mapperJson($json)
@@ -93,11 +96,17 @@ class BaseResponse implements \JsonSerializable
                 }
             }
         });
+
         return $this;
     }
 
     public function toJSON()
     {
         return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
