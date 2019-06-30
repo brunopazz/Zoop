@@ -11,11 +11,27 @@ namespace Zoop;
 use Exception;
 
 
+/**
+ * Class Zoop
+ *
+ * @package Zoop
+ */
 class Zoop
 {
+    /**
+     * @var Request
+     */
     protected $request;
+    /**
+     * @var Credentials
+     */
     protected $credentials;
 
+    /**
+     * Zoop constructor.
+     *
+     * @param Credentials $credentials
+     */
     public function __construct(Credentials $credentials)
     {
         try {
@@ -27,8 +43,14 @@ class Zoop
 
             return $error;
         }
+        return $this;
     }
 
+    /**
+     * @param Transactions $transaction
+     *
+     * @return AuthorizeResponse|BaseResponse
+     */
     public function Authorize(Transactions $transaction)
     {
         try {
@@ -49,6 +71,13 @@ class Zoop
         return $authresponse;
     }
 
+    /**
+     * @param      $OnBehalfOf
+     * @param      $transactionID
+     * @param null $amount
+     *
+     * @return AuthorizeResponse|BaseResponse
+     */
     public function Capture($OnBehalfOf, $transactionID, $amount = null)
     {
         try {
@@ -74,6 +103,13 @@ class Zoop
         return $authresponse;
     }
 
+    /**
+     * @param      $OnBehalfOf
+     * @param      $transactionID
+     * @param null $amount
+     *
+     * @return AuthorizeResponse|BaseResponse
+     */
     public function Cancel($OnBehalfOf, $transactionID, $amount = null)
     {
         try {
@@ -99,6 +135,12 @@ class Zoop
         return $authresponse;
     }
 
+    /**
+     * @param Split $split
+     * @param       $transactionID
+     *
+     * @return BaseResponse|SplitResponse
+     */
     public function Split(Split $split,$transactionID)
     {
         try {
