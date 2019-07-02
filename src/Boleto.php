@@ -78,7 +78,7 @@ class Boleto implements \JsonSerializable
      */
     public function setAmount($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (string)$amount;
 
         return $this;
     }
@@ -98,7 +98,7 @@ class Boleto implements \JsonSerializable
      */
     public function setCurrency($currency)
     {
-        $this->currency = $currency;
+        $this->currency = (string)$currency;
 
         return $this;
     }
@@ -118,7 +118,7 @@ class Boleto implements \JsonSerializable
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = (string)$description;
 
         return $this;
     }
@@ -138,7 +138,7 @@ class Boleto implements \JsonSerializable
      */
     public function setOnBehalfOf($on_behalf_of)
     {
-        $this->on_behalf_of = $on_behalf_of;
+        $this->on_behalf_of = (string)$on_behalf_of;
 
         return $this;
     }
@@ -158,7 +158,7 @@ class Boleto implements \JsonSerializable
      */
     public function setCustomer($customer)
     {
-        $this->customer = $customer;
+        $this->customer = (string)$customer;
 
         return $this;
     }
@@ -178,7 +178,7 @@ class Boleto implements \JsonSerializable
      */
     public function setPaymentType($payment_type)
     {
-        $this->payment_type = $payment_type;
+        $this->payment_type = (string)$payment_type;
 
         return $this;
     }
@@ -198,27 +198,7 @@ class Boleto implements \JsonSerializable
      */
     public function setExpirationDate($expiration_date)
     {
-        $this->expiration_date = $expiration_date;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBodyInstructions()
-    {
-        return $this->body_instructions;
-    }
-
-    /**
-     * @param mixed $body_instructions
-     *
-     * @return Boleto
-     */
-    public function setBodyInstructions($body_instructions)
-    {
-        $this->body_instructions = $body_instructions;
+        $this->expiration_date = (string)$expiration_date;
 
         return $this;
     }
@@ -238,7 +218,27 @@ class Boleto implements \JsonSerializable
      */
     public function setPaymentLimitDate($payment_limit_date)
     {
-        $this->payment_limit_date = $payment_limit_date;
+        $this->payment_limit_date = (string)$payment_limit_date;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBodyInstructions()
+    {
+        return $this->body_instructions;
+    }
+
+    /**
+     * @param mixed $body_instructions
+     *
+     * @return Boleto
+     */
+    public function setBodyInstructions($body_instructions)
+    {
+        $this->body_instructions = (string)$body_instructions;
 
         return $this;
     }
