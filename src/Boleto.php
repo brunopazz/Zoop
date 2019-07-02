@@ -68,26 +68,6 @@ class Boleto implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getReferenceId()
-    {
-        return $this->reference_id;
-    }
-
-    /**
-     * @param mixed $reference_id
-     *
-     * @return Boleto
-     */
-    public function setReferenceId($reference_id)
-    {
-        $this->reference_id = $reference_id;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAmount()
     {
         return $this->amount;
@@ -161,6 +141,26 @@ class Boleto implements \JsonSerializable
     public function setOnBehalfOf($on_behalf_of)
     {
         $this->on_behalf_of = (string)$on_behalf_of;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReferenceId()
+    {
+        return $this->reference_id;
+    }
+
+    /**
+     * @param mixed $reference_id
+     *
+     * @return Boleto
+     */
+    public function setReferenceId($reference_id)
+    {
+        $this->reference_id = (string)$reference_id;
 
         return $this;
     }
