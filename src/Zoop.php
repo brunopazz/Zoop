@@ -29,7 +29,31 @@ class Zoop
         }
         return $this;
     }
+    public function Boleto(Boleto $boleto, Customer $customer)
+    {
+        try {
+            $customer_response = $this->request->post($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/buyers",
+                $customer->toJSON());
 
+            $boleto->setCustomer(json_decode($customer_response)->id);
+
+            $response = $this->request->post($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions",
+                $boleto->toJSON());
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        $authresponse = new AuthorizeResponse();
+        $authresponse->mapperJson(json_decode($response, true));
+
+        return $authresponse;
+    }
     public function Authorize(Transactions $transaction)
     {
         try {
