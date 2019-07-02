@@ -42,6 +42,8 @@ class AuthorizeResponse extends BaseResponse
     protected $authorization_code;
     protected $authorization_nsu;
     protected $authresponse;
+    protected $url;
+    protected $barcode;
 
     /**
      * @return mixed
@@ -297,6 +299,46 @@ class AuthorizeResponse extends BaseResponse
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     *
+     * @return AuthorizeResponse
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param mixed $barcode
+     *
+     * @return AuthorizeResponse
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
+
+        return $this;
     }
 
 
