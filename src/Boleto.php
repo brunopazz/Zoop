@@ -20,6 +20,7 @@ class Boleto implements \JsonSerializable
     protected $expiration_date;
     protected $body_instructions;
     protected $payment_limit_date;
+    protected $reference_id;
 
     public function toJSON()
     {
@@ -36,6 +37,7 @@ class Boleto implements \JsonSerializable
                 'currency'       => $this->getCurrency(),
                 'description'    => $this->getDescription(),
                 'on_behalf_of'   => $this->getOnBehalfOf(),
+                'reference_id'   => $this->getReferenceId(),
                 'customer'       => $this->getCustomer(),
                 'payment_type'   => $this->getPaymentType(),
                 'payment_method' => [
@@ -61,6 +63,26 @@ class Boleto implements \JsonSerializable
             return false;
         }
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReferenceId()
+    {
+        return $this->reference_id;
+    }
+
+    /**
+     * @param mixed $reference_id
+     *
+     * @return Boleto
+     */
+    public function setReferenceId($reference_id)
+    {
+        $this->reference_id = $reference_id;
+
+        return $this;
     }
 
     /**
