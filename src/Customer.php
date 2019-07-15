@@ -261,7 +261,8 @@ class Customer implements \JsonSerializable
      */
     public function setAddressCountryCode($address_country_code)
     {
-        $this->address_country_code = (string)$address_country_code;
+        $this->address_country_code = strtoupper(substr((string)$address_country_code,
+            0, 2));
 
         return $this;
     }
