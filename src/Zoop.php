@@ -44,7 +44,7 @@ class Zoop
 
         } catch (Exception $e) {
 
-            $error = new BaseResponse();
+            $error = new AuthorizeResponse();
             $error->setResponse($e->getMessage());
 
             return $error;
