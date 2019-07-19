@@ -27,8 +27,10 @@ class Zoop
 
             return $error;
         }
+
         return $this;
     }
+
     public function Boleto(Boleto $boleto, Customer $customer)
     {
         try {
@@ -54,6 +56,7 @@ class Zoop
 
         return $authresponse;
     }
+
     public function Authorize(Transactions $transaction)
     {
         try {
@@ -79,8 +82,9 @@ class Zoop
         try {
 
             $json = ["on_behalf_of" => $OnBehalfOf];
-            if (isset($amount))
+            if (isset($amount)) {
                 $json["amount"] = $amount;
+            }
 
             $response = $this->request->post($this->credentials,
                 "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/capture",
@@ -104,8 +108,9 @@ class Zoop
         try {
 
             $json = ["on_behalf_of" => $OnBehalfOf];
-            if (isset($amount))
+            if (isset($amount)) {
                 $json["amount"] = $amount;
+            }
 
             $response = $this->request->post($this->credentials,
                 "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/void",
@@ -124,7 +129,7 @@ class Zoop
         return $authresponse;
     }
 
-    public function Split(Split $split,$transactionID)
+    public function Split(Split $split, $transactionID)
     {
         try {
 
@@ -144,5 +149,29 @@ class Zoop
         $splitresponse->mapperJson(json_decode($response, true));
 
         return $splitresponse;
+    }
+
+    public function QueryOrder($OnBehalfOf, $transactionID)
+    {
+        try {
+
+            $json = ["on_behalf_of" => $OnBehalfOf];
+
+            $response = $this->request->get($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions?reference_id=".$transactionID,
+                json_encode($json));
+
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        $authresponse = new AuthorizeResponse();
+        $authresponse->mapperJson(json_decode($response, true));
+
+        return $authresponse;
     }
 }

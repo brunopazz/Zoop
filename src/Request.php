@@ -11,6 +11,11 @@ namespace Zoop;
 use Exception;
 
 
+/**
+ * Class Request
+ *
+ * @package Zoop
+ */
 class Request
 {
     /**
@@ -21,6 +26,11 @@ class Request
     private $baseUrl = '';
 
 
+    /**
+     * Request constructor.
+     *
+     * @param Credentials $credentials
+     */
     function __construct(Credentials $credentials)
     {
         if ($credentials->getEnv() == "PRODUCTION") {
@@ -28,8 +38,9 @@ class Request
         } elseif ($credentials->getEnv() == "SANDBOX") {
             $this->baseUrl = 'https://api.zoop.ws';
         } else {
-           return false;
+            return false;
         }
+        return false;
     }
 
     /**
@@ -40,33 +51,35 @@ class Request
         return $this->baseUrl;
     }
 
+
     /**
-     * @param Getnet $credentials
-     * @param        $url_path
+     * @param Credentials $credentials
+     * @param             $url_path
      *
-     * @return mixed
+     * @return bool|string
      * @throws Exception
      */
-    function get(Getnet $credentials, $url_path)
+    function get(Credentials $credentials, $url_path)
     {
         return $this->send($credentials, $url_path, 'GET');
     }
 
     /**
-     * @param Getnet $credentials
-     * @param        $url_path
-     * @param        $method
-     * @param null   $json
+     * @param Credentials $credentials
+     * @param             $url_path
+     * @param             $method
+     * @param null        $json
      *
-     * @return mixed
-     * @throws \Exception
+     * @return bool|string
+     * @throws Exception
      */
     private function send(
         Credentials $credentials,
         $url_path,
         $method,
         $json = null
-    ) {
+    )
+    {
         $curl = curl_init($this->getFullUrl($url_path));
 
         $defaultCurlOptions = array(
@@ -83,13 +96,17 @@ class Request
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+            curl_setopt($curl, CURLOPT_ENCODING, "");
+            curl_setopt_array($curl, $defaultCurlOptions);
+        } elseif ($method == 'GET') {
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
         } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+            curl_setopt($curl, CURLOPT_ENCODING, "");
+            curl_setopt_array($curl, $defaultCurlOptions);
         }
-        curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt_array($curl, $defaultCurlOptions);
-
 
         try {
             $response = curl_exec($curl);
@@ -97,9 +114,9 @@ class Request
             return "ERROR";
         }
 
-
         if (isset(json_decode($response)->error)) {
-            throw new Exception(json_decode($response)->error->message, json_decode($response)->error->status_code);
+            throw new Exception(json_decode($response)->error->message,
+                json_decode($response)->error->status_code);
         }
 
         if (curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400) {
@@ -130,23 +147,17 @@ class Request
         return $this->baseUrl.$url_path;
     }
 
+    /**
+     * @param Credentials $credentials
+     * @param             $url_path
+     * @param             $params
+     *
+     * @return bool|string
+     * @throws Exception
+     */
     function post(Credentials $credentials, $url_path, $params)
     {
         return $this->send($credentials, $url_path, 'POST', $params);
-    }
-
-
-    /**
-     * @param Getnet $credentials
-     * @param        $url_path
-     * @param        $params
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    function put(Getnet $credentials, $url_path, $params)
-    {
-        return $this->send($credentials, $url_path, 'PUT', $params);
     }
 
 }
