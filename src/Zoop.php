@@ -174,4 +174,26 @@ class Zoop
 
         return $authresponse;
     }
+
+    public function QueryOrderByID($transactionID)
+    {
+        try {
+
+
+            $response = $this->request->get($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID);
+
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        $authresponse = new AuthorizeResponse();
+        $authresponse->mapperJson(json_decode($response, true));
+
+        return $authresponse;
+    }
 }
