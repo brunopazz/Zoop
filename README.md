@@ -94,7 +94,7 @@ if($splitResponse->hasSplitted()){
     print $splitResponse->toJSON();
 `````
 
-### Seller
+### Seller (IN DEVELOPMENT)
 
 ````php 
 $credentials = new Credentials("xxx","zpk_test_xxxx", "xxxxxx","PRODUCTION");
