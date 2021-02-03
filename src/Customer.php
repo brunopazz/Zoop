@@ -9,33 +9,89 @@
 namespace Zoop;
 
 
+/**
+ * Class Customer
+ *
+ * @package Zoop
+ */
 class Customer implements \JsonSerializable
 {
+    /**
+     * @var
+     */
     protected $first_name;
+    /**
+     * @var
+     */
+    protected $last_name;
+    /**
+     * @var
+     */
+    protected $birthdate;
+    /**
+     * @var
+     */
+    protected $phone_number;
+    /**
+     * @var
+     */
     protected $taxpayer_id;
+    /**
+     * @var
+     */
     protected $email;
+    /**
+     * @var
+     */
     protected $address_line1;
+    /**
+     * @var
+     */
     protected $address_line2;
+    /**
+     * @var
+     */
     protected $address_neighborhood;
+    /**
+     * @var
+     */
     protected $address_city;
+    /**
+     * @var
+     */
     protected $address_state;
+    /**
+     * @var
+     */
     protected $address_postal_code;
+    /**
+     * @var
+     */
     protected $address_country_code;
 
+    /**
+     * @return false|string
+     */
     public function toJSON()
     {
         return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
     }
 
+    /**
+     * @return array|bool|mixed
+     */
     public function jsonSerialize()
     {
         try {
 
 
             $obj        = array(
-                'first_name'  => $this->getFirstName(),
-                'taxpayer_id' => $this->getTaxpayerId(),
-                'email'       => $this->getEmail(),
+                'first_name'   => $this->getFirstName(),
+                'last_name'    => $this->getLastName(),
+                'birthdate'    => $this->getBirthdate(),
+                'phone_number' => $this->getPhoneNumber(),
+                'taxpayer_id'  => $this->getTaxpayerId(),
+                'email'        => $this->getEmail(),
 
                 'address' =>
                     array(
@@ -82,6 +138,68 @@ class Customer implements \JsonSerializable
     public function setFirstName($first_name)
     {
         $this->first_name = (string)$first_name;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * @param mixed $last_name
+     *
+     * @return Customer
+     */
+    public function setLastName($last_name)
+    {
+        $this->last_name = $last_name;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBirthdate()
+    {
+        return $this->birthdate;
+    }
+
+    /**
+     * @param mixed $birthdate
+     *
+     * @return Customer
+     */
+    public function setBirthdate($birthdate)
+    {
+        $date = \DateTime::createFromFormat('Y-m-d', $birthdate);
+        if ($date) {
+            $this->birthdate =  $date->format('Y-m-d');
+        }
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phone_number;
+    }
+
+    /**
+     * @param mixed $phone_number
+     *
+     * @return Customer
+     */
+    public function setPhoneNumber($phone_number)
+    {
+        $this->phone_number = $phone_number;
 
         return $this;
     }

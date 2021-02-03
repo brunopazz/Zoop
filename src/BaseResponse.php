@@ -82,6 +82,8 @@ class BaseResponse implements \JsonSerializable
 
     }
 
+
+
     public function mapperJson($json)
     {
         $this->setResponse($json);

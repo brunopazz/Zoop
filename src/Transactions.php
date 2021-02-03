@@ -34,6 +34,7 @@ class Transactions implements \JsonSerializable
     private $security_code;
     private $statement_descriptor;
     private $installment_plan;
+    private $customer;
 
     public function toJSON()
     {
@@ -83,8 +84,14 @@ class Transactions implements \JsonSerializable
                 'installment_plan'     =>
                     $this->getInstallmentPlan(),
                 'statement_descriptor' => $this->getStatementDescriptor(),
+                'customer' => $this->getCustomer(),
 
             );
+
+            if( !empty($this->getCustomer())){
+                $obj['source'] = null;
+            }
+
             $vars_clear = array_filter($obj, function ($value) {
                 if (is_array($value)) {
                     foreach ($value as $value2) {
@@ -101,6 +108,26 @@ class Transactions implements \JsonSerializable
         }
 
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     *
+     * @return Transactions
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+
+        return $this;
     }
 
     /**
