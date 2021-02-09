@@ -171,19 +171,30 @@ class Zoop
         return $authresponse;
     }
 
+
     /**
-     * @param Split $split
-     * @param       $transactionID
+     * @param Split  $split
+     * @param        $transactionID
+     * @param string $action (create,remove,query )
+     * @param null   $id
      *
      * @return BaseResponse|SplitResponse
      */
-    public function Split(Split $split, $transactionID)
+    public function Split(Split $split, $transactionID, $action="create",$id=null)
     {
         try {
+           if($action =="create" && isset($split)){
+               $response = $this->request->post($this->credentials,
+                   "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/split_rules",
+                   $split->toJSON());
+           }elseif ($action=="remove" && !empty($id)){
+               $response = $this->request->delete($this->credentials,
+                   "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/split_rules/".$id);
+           }elseif ($action=="query"){
+               $response = $this->request->get($this->credentials,
+                   "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/split_rules");
+           }
 
-            $response = $this->request->post($this->credentials,
-                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID."/split_rules",
-                $split->toJSON());
 
 
         } catch (Exception $e) {
