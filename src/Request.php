@@ -64,6 +64,11 @@ class Request
         return $this->send($credentials, $url_path, 'GET');
     }
 
+    function delete(Credentials $credentials, $url_path)
+    {
+        return $this->send($credentials, $url_path, 'DELETE');
+    }
+
     /**
      * @param Credentials $credentials
      * @param             $url_path
