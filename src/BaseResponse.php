@@ -13,6 +13,7 @@ class BaseResponse implements \JsonSerializable
 {
 
     private $response;
+    private $status;
 
     /**
      * @return mixed

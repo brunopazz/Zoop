@@ -264,6 +264,86 @@ class Zoop
         return $authresponse;
     }
 
+    /**
+     * @param $transactionID
+     *
+     * @return mixed|BaseResponse
+     */
+    public function ReceivablesByID($transactionID)
+    {
+        try {
+
+            $response = $this->request->get($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/transactions/".$transactionID.'/receivables');
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        return json_decode($response,true);
+    }
+
+    /**
+     * @param      $seller_id
+     * @param null $date
+     *
+     * @return mixed|BaseResponse
+     */
+    public function ReceivablesSearch($seller_id, $date = null)
+    {
+        try {
+            $response = $this->request->get($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/sellers/".$seller_id.'/receivables/?prepayable_for='.$date);
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+
+        return json_decode($response, true);
+    }
+
+    /**
+     * @param        $owner
+     * @param        $receiver
+     * @param        $amount
+     * @param string $description
+     * @param null   $date
+     *
+     * @return array|BaseResponse
+     */
+    public function TransferP2P ( $owner,$receiver,$amount,$description="Crédito em conta", $date = null)
+    {
+        try {
+
+            $transfer = new P2P();
+            $transfer->setAmount($amount);
+            $transfer->setDescription($description);
+            $transfer->setTransferDate($date);
+
+            $response = $this->request->post($this->credentials,
+                "/v1/marketplaces/".$this->credentials->getMarketplaceId()."/adjustments/".$owner."/to/".$receiver,
+                $transfer->toJSON());
+
+
+        } catch (Exception $e) {
+
+            $error = new BaseResponse();
+            $error->setResponse($e->getMessage());
+
+            return $error;
+        }
+        $result = new BaseResponse();
+        $result->mapperJson(json_decode($response, true));
+        return $result;
+    }
+
 
     /**
      * @param Card     $card
